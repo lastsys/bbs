@@ -111,7 +111,6 @@ function initializeWebSocket(canvas) {
 }
 
 function renderBuffer(canvas) {
-    console.log('Rendering...');
     let ctx = canvas.element.getContext('2d');
     ctx.imageSmoothingEnabled = false;
     let pos;

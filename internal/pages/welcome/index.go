@@ -9,6 +9,12 @@ import (
 	"github.com/lastsys/bbs/internal/user"
 )
 
+var menuItems = []string{
+	"Pusher",
+	"Game of Life",
+	"About Combine",
+}
+
 func Index(s *user.Session) {
 	s.Buffer.Clear()
 	util.WriteCombineName(s)
@@ -29,12 +35,12 @@ OuterLoop:
 				case protocol.UpArrow:
 					selectedItem = selectedItem - 1
 					if selectedItem < 0 {
-						selectedItem = 1
+						selectedItem = len(menuItems) - 1
 					}
 					writeMenu(s, selectedItem)
 					s.UpdateClient()
 				case protocol.DownArrow:
-					selectedItem = (selectedItem + 1) % 2
+					selectedItem = (selectedItem + 1) % len(menuItems)
 					writeMenu(s, selectedItem)
 					s.UpdateClient()
 				case protocol.Enter:
@@ -48,6 +54,8 @@ OuterLoop:
 	case 0:
 		s.Navigate(pages.Pusher)
 	case 1:
+		s.Navigate(pages.Life)
+	case 2:
 		s.Navigate(pages.About)
 	}
 }
@@ -55,15 +63,14 @@ OuterLoop:
 func writeMenu(s *user.Session, selectedItem int) {
 	var space = screen.Character{32, screen.White, screen.DarkGray, false}
 	var row, col uint8
-	for row = 1; row <= 6; row++ {
-		for col = 1; col <= 30; col++ {
+	const boxWidth = 30
+	const menuStart = 4
+	const menuCol = 3
+
+	for row = 1; row <= menuStart+uint8(len(menuItems)); row++ {
+		for col = 1; col <= boxWidth; col++ {
 			s.Buffer.Write(space, row, col)
 		}
-	}
-
-	var menuItems = []string{
-		"Pusher (Game)",
-		"About Combine",
 	}
 
 	s.Buffer.Print("Please make a choice:", 2, 2, screen.White, screen.DarkGray)
@@ -75,7 +82,7 @@ func writeMenu(s *user.Session, selectedItem int) {
 		} else {
 			color = screen.DarkGray
 		}
-		s.Buffer.Print(fmt.Sprintf("%v. %v", i+1, str), 4+uint8(i), 3,
+		s.Buffer.Print(fmt.Sprintf("%v. %v", i+1, str), menuStart+uint8(i), menuCol,
 			screen.White, color)
 	}
 }

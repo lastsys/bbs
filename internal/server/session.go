@@ -4,6 +4,7 @@ import (
 	"github.com/gorilla/websocket"
 	"github.com/lastsys/bbs/internal/pages"
 	"github.com/lastsys/bbs/internal/pages/about"
+	"github.com/lastsys/bbs/internal/pages/life"
 	"github.com/lastsys/bbs/internal/pages/pusher"
 	"github.com/lastsys/bbs/internal/pages/welcome"
 	"github.com/lastsys/bbs/internal/protocol"
@@ -43,6 +44,8 @@ func navigationHandler(clientSession *user.Session) {
 			go welcome.Index(clientSession)
 		case pages.Pusher:
 			go pusher.Index(clientSession)
+		case pages.Life:
+			go life.Index(clientSession)
 		case pages.About:
 			go about.Index(clientSession)
 		}
