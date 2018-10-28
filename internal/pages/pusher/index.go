@@ -8,11 +8,43 @@ import (
 	"github.com/lastsys/bbs/internal/user"
 )
 
+const (
+	BoardWidth  = 21
+	BoardHeight = 21
+)
+
+var board = []string{
+	".........xxx.........",
+	".....................",
+	"..xx.............xx..",
+	"..x...............x..",
+	".....................",
+	".....................",
+	".....................",
+	".....................",
+	"..........x..........",
+	"x.........x.........x",
+	"x.......xxxxx.......x",
+	"x.........x.........x",
+	"..........x..........",
+	".....................",
+	".....................",
+	".....................",
+	".....................",
+	"..x...............x..",
+	"..xx.............xx..",
+	".....................",
+	".........xxx.........",
+}
+
+var floorTile = screen.Character{32, screen.White, screen.DarkGray, false}
+var wallTile = screen.Character{32, screen.Black, screen.LightGray, false}
+
 func Index(s *user.Session) {
 	s.Buffer.Clear()
 	util.WriteCombineName(s)
 	util.WriteCombineLogo(s)
-	s.Buffer.Print("Not Implemented...", 1, 1, screen.White, screen.Black)
+	drawEmptyBoard(s)
 	s.UpdateClient()
 
 OuterLoop:
@@ -30,4 +62,17 @@ OuterLoop:
 	}
 
 	s.Navigate(pages.Welcome)
+}
+
+func drawEmptyBoard(s *user.Session) {
+	for row, tiles := range board {
+		for col, tile := range tiles {
+			switch tile {
+			case '.':
+				s.Buffer.Write(floorTile, uint8(row)+1, uint8(col)+1)
+			case 'x':
+				s.Buffer.Write(wallTile, uint8(row)+1, uint8(col)+1)
+			}
+		}
+	}
 }

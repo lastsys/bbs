@@ -1,16 +1,17 @@
 package server
 
 import (
-	"github.com/gorilla/mux"
-	"github.com/gorilla/websocket"
-	"github.com/lastsys/bbs/internal/pages/welcome"
-	"github.com/lastsys/bbs/internal/user"
-	"golang.org/x/net/http2"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"sync"
 	"time"
+
+	"github.com/gorilla/mux"
+	"github.com/gorilla/websocket"
+	"github.com/lastsys/bbs/internal/pages/welcome"
+	"github.com/lastsys/bbs/internal/user"
+	"golang.org/x/net/http2"
 )
 
 const (
