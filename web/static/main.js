@@ -58,6 +58,9 @@ function flp2(x) {
     x = x | (x >> 4);
     x = x | (x >> 8);
     x = x | (x >> 16);
+    if (x < 1) {
+        return 1;
+    }
     return x - (x >> 1);
 }
 
