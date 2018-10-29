@@ -76,3 +76,32 @@ func drawEmptyBoard(s *user.Session) {
 		}
 	}
 }
+
+type Position struct {
+	row    uint8
+	column uint8
+}
+
+type Role uint8
+
+const (
+	HunterAgent Role = iota
+	PreyAgent
+)
+
+type Agent struct {
+	position Position
+	role     Role
+}
+
+type Agents []Agent
+
+var agents = Agents{
+	Agent{Position{1, 1}, HunterAgent},
+	Agent{Position{20, 20}, PreyAgent},
+}
+
+// Move agents according to rules.
+func (a *Agents) Update(board []string) {
+
+}
