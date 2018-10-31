@@ -58,7 +58,15 @@ func (r *Robots) applyActions(actions *Actions, board *Board) {
 func initializeRobots() *Robots {
 	robots := Robots{
 		RobotId(RedRobot1):  &Robot{Position{1, 1}, RobotId(RedRobot1), RedTeam, false},
+		RobotId(RedRobot2):  &Robot{Position{1, 2}, RobotId(RedRobot2), RedTeam, false},
+		RobotId(RedRobot3):  &Robot{Position{1, 3}, RobotId(RedRobot3), RedTeam, false},
+		RobotId(RedRobot4):  &Robot{Position{1, 4}, RobotId(RedRobot4), RedTeam, false},
+		RobotId(RedRobot5):  &Robot{Position{1, 5}, RobotId(RedRobot5), RedTeam, false},
 		RobotId(BlueRobot1): &Robot{Position{19, 19}, RobotId(BlueRobot1), BlueTeam, false},
+		RobotId(BlueRobot2): &Robot{Position{19, 18}, RobotId(BlueRobot2), BlueTeam, false},
+		RobotId(BlueRobot3): &Robot{Position{19, 17}, RobotId(BlueRobot3), BlueTeam, false},
+		RobotId(BlueRobot4): &Robot{Position{19, 16}, RobotId(BlueRobot4), BlueTeam, false},
+		RobotId(BlueRobot5): &Robot{Position{19, 15}, RobotId(BlueRobot5), BlueTeam, false},
 	}
 	return &robots
 }

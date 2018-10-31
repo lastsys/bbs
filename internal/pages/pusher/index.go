@@ -23,20 +23,20 @@ func Index(s *user.Session) {
 	s.Buffer.Clear()
 	util.WriteCombineName(s)
 	util.WriteCombineLogo(s)
-	for i := 0; i < 10; i++ {
-		buildBoard(board, robots)
-		drawBoard(s, board)
-		writeStatus(s, robots)
-		s.UpdateClient()
+	//for i := 0; i < 10; i++ {
+	buildBoard(board, robots)
+	drawBoard(s, board)
+	writeStatus(s, robots)
+	s.UpdateClient()
 
-		redActions := runScript("assets/default.js", BlueTeam, board, robots)
-		blueActions := runScript("assets/default.js", RedTeam, board, robots)
+	//redActions := runScript("assets/default.js", BlueTeam, board, robots)
+	//blueActions := runScript("assets/default.js", RedTeam, board, robots)
+	//
+	//robots.applyActions(redActions, board)
+	//robots.applyActions(blueActions, board)
 
-		robots.applyActions(redActions, board)
-		robots.applyActions(blueActions, board)
-
-		time.Sleep(500 * time.Millisecond)
-	}
+	//time.Sleep(500 * time.Millisecond)
+	//}
 
 OuterLoop:
 	for {
@@ -82,10 +82,7 @@ func runScript(path string, team Team, board *Board, robots *Robots) *Actions {
 
 	vm := otto.New()
 	vm.Interrupt = make(chan func(), 1) // Non-blocking with buffer.
-	vm.Set("ROBOTS", robots)
-	vm.Set("BOARD", board)
-	vm.Set("BOARD_WIDTH", BoardWidth)
-	vm.Set("BOARD_HEIGHT", BoardHeight)
+	injectData(vm, robots, board)
 	program, err := parser.ParseFile(nil, path, nil, 0)
 	if err != nil {
 		log.Println(err)
@@ -112,6 +109,29 @@ func runScript(path string, team Team, board *Board, robots *Robots) *Actions {
 			panic(halt)
 		}
 		return nil
+	}
+}
+
+func injectData(vm *otto.Otto, robots *Robots, board *Board) {
+	if value, err := vm.ToValue(robots); err == nil {
+		if err := vm.Set("ROBOTS", value); err != nil {
+			log.Println("Failed to set ROBOTS:", err)
+		}
+	} else {
+		log.Println("Failed to convert robots to value.")
+	}
+	if value, err := vm.ToValue(board); err == nil {
+		if err := vm.Set("BOARD", value); err != nil {
+			log.Println("Failed to set BOARD:", err)
+		}
+	} else {
+		log.Println("Failed to convert board to value.")
+	}
+	if err := vm.Set("BOARD_WIDTH", BoardWidth); err != nil {
+		log.Println("Failed to set BOARD_WIDTH.")
+	}
+	if err := vm.Set("BOARD_HEIGHT", BoardHeight); err != nil {
+		log.Println("Failed to set BOARD_HEIGHT.")
 	}
 }
 
